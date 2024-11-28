@@ -1,0 +1,8 @@
+    register(user: User): Observable<any> {
+        return this.http.post(`${this.baseUrl}/registro`, user, { headers: this.getHeaders() })
+            .pipe(
+                tap(response => {
+                    console.log('Registro exitoso:', response);
+                })
+            );
+    }

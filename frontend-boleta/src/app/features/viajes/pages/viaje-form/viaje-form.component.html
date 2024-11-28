@@ -1,0 +1,134 @@
+<!-- src/app/features/viajes/pages/viaje-form/viaje-form.component.html -->
+<div class="p-6">
+    <!-- Header -->
+    <div class="mb-6 flex justify-between items-center">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900">
+                {{isEditing ? 'Editar' : 'Crear'}} Viaje
+            </h2>
+            <p class="mt-1 text-sm text-gray-600">Complete los detalles del viaje</p>
+        </div>
+        <button routerLink="/viajes"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+            Volver
+        </button>
+    </div>
+
+    <!-- Error Message -->
+    @if (errorMessage) {
+    <div class="mb-6 rounded-md bg-red-50 p-4">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm font-medium text-red-800">{{errorMessage}}</p>
+            </div>
+        </div>
+    </div>
+    }
+
+    <!-- Form -->
+    <form [formGroup]="viajeForm" (ngSubmit)="onSubmit()" class="bg-white shadow-sm ring-1 ring-gray-900/5 rounded-lg">
+        <div class="p-8">
+            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
+                <!-- Origen -->
+                <div>
+                    <label for="origen" class="block text-sm font-medium text-gray-700">Origen</label>
+                    <div class="mt-1">
+                        <input type="text" id="origen" formControlName="origen"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="isFieldInvalid('origen')" placeholder="Ciudad de origen">
+                        @if (isFieldInvalid('origen')) {
+                        <p class="mt-1 text-sm text-red-600">{{getErrorMessage('origen')}}</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Destino -->
+                <div>
+                    <label for="destino" class="block text-sm font-medium text-gray-700">Destino</label>
+                    <div class="mt-1">
+                        <input type="text" id="destino" formControlName="destino"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="isFieldInvalid('destino')" placeholder="Ciudad de destino">
+                        @if (isFieldInvalid('destino')) {
+                        <p class="mt-1 text-sm text-red-600">{{getErrorMessage('destino')}}</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Fecha Salida -->
+                <div>
+                    <label for="fechaSalida" class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
+                    <div class="mt-1">
+                        <input type="datetime-local" id="fechaSalida" formControlName="fechaSalida"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="isFieldInvalid('fechaSalida')">
+                        @if (isFieldInvalid('fechaSalida')) {
+                        <p class="mt-1 text-sm text-red-600">{{getErrorMessage('fechaSalida')}}</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Fecha Llegada -->
+                <div>
+                    <label for="fechaLlegada" class="block text-sm font-medium text-gray-700">Fecha de Llegada</label>
+                    <div class="mt-1">
+                        <input type="datetime-local" id="fechaLlegada" formControlName="fechaLlegada"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="isFieldInvalid('fechaLlegada')">
+                        @if (isFieldInvalid('fechaLlegada')) {
+                        <p class="mt-1 text-sm text-red-600">{{getErrorMessage('fechaLlegada')}}</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Precio -->
+                <div>
+                    <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">S/</span>
+                        </div>
+                        <input type="number" id="precio" formControlName="precio"
+                            class="block w-full pl-7 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="isFieldInvalid('precio')" min="0" step="0.01" placeholder="0.00">
+                        @if (isFieldInvalid('precio')) {
+                        <p class="mt-1 text-sm text-red-600">{{getErrorMessage('precio')}}</p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Capacidad Total -->
+                <div>
+                    <label for="capacidadTotal" class="block text-sm font-medium text-gray-700">Capacidad Total</label>
+                    <div class="mt-1">
+                        <input type="number" id="capacidadTotal" formControlName="capacidadTotal"
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            [class.border-red-300]="isFieldInvalid('capacidadTotal')" min="1" step="1">
+                        @if (isFieldInvalid('capacidadTotal')) {
+                        <p class="mt-1 text-sm text-red-600">{{getErrorMessage('capacidadTotal')}}</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex items-center justify-end gap-x-4 border-t border-gray-900/10 px-8 py-4">
+            <button type="button" routerLink="/viajes"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                Cancelar
+            </button>
+            <button type="submit" [disabled]="viajeForm.invalid || isSubmitting"
+                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                {{isSubmitting ? 'Guardando...' : (isEditing ? 'Actualizar' : 'Crear')}}
+            </button>
+        </div>
+    </form>
+</div>

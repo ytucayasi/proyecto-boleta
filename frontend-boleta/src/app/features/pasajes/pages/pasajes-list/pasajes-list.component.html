@@ -1,0 +1,86 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <div class="flex flex-col gap-2">
+            <div class="flex-1">
+                <input [formControl]="searchControl" type="text" placeholder="Ingrese DNI para buscar pasajes..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <p class="text-sm text-gray-500">Ingrese el DNI del pasajero para ver sus pasajes</p>
+        </div>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="error && searchPerformed"
+        class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+        {{ error }}
+    </div>
+
+    <!-- Loading indicator -->
+    <div *ngIf="loading" class="flex justify-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-indigo-500"></div>
+    </div>
+
+    <!-- Lista de pasajes -->
+    <div *ngIf="pasajes.length > 0" class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Pasajes Encontrados</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let pasaje of pasajes"
+                class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold">{{ pasaje.viaje.origen }} - {{ pasaje.viaje.destino }}</h3>
+                        <p class="text-gray-600 mt-1">Salida: {{ pasaje.viaje.fechaSalida | date:'short' }}</p>
+                        <p class="text-gray-600">Llegada: {{ pasaje.viaje.fechaLlegada | date:'short' }}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-lg font-bold text-green-600">S/. {{ pasaje.viaje.precio }}</span>
+                        <p class="text-sm text-gray-500">Asiento: {{ pasaje.numeroAsiento }}</p>
+                    </div>
+                </div>
+
+                <div class="border-t pt-4">
+                    <h4 class="font-medium mb-2">Datos del Pasajero</h4>
+                    <p class="text-sm text-gray-600">{{ pasaje.usuario.nombre }} {{ pasaje.usuario.apellido }}</p>
+                    <p class="text-sm text-gray-600">DNI: {{ pasaje.usuario.dni }}</p>
+                    <p class="text-sm text-gray-600">Tel: {{ pasaje.usuario.telefono }}</p>
+                </div>
+
+                <div class="border-t mt-4 pt-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium">Estado:
+                            <span class="text-indigo-600">{{ pasaje.estado }}</span>
+                        </span>
+                        <span class="text-sm text-gray-500">Código: {{ pasaje.codigoReserva }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de viajes disponibles -->
+    <div *ngIf="viajes.length > 0" class="mt-8">
+        <h2 class="text-xl font-semibold mb-4">Viajes Disponibles</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let viaje of viajes"
+                class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h3 class="text-lg font-semibold">{{ viaje.origen }} - {{ viaje.destino }}</h3>
+                        <p class="text-gray-600 mt-1">Salida: {{ viaje.fechaSalida | date:'short' }}</p>
+                        <p class="text-gray-600">Llegada: {{ viaje.fechaLlegada | date:'short' }}</p>
+                    </div>
+                    <span class="text-lg font-bold text-green-600">S/. {{ viaje.precio }}</span>
+                </div>
+
+                <div class="mt-2">
+                    <p class="text-sm text-gray-600">Asientos disponibles: {{ viaje.asientosDisponibles }}</p>
+                </div>
+
+                <button (click)="comprarPasaje(viaje)"
+                    class="mt-4 w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors">
+                    Comprar Pasaje
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
